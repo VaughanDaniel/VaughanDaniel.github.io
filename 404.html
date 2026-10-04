@@ -41,6 +41,21 @@
       @media (prefers-color-scheme: dark) {
         html, body { background-color: #030D1D; }
       }
+      /* An app, not a document. Without this, iOS reads a press on the map as
+         "select text": it highlighted the header's "Search" label, opened its
+         Copy / Look Up menu, and swallowed the tap, so tapping a dam to add it
+         did nothing. Text inputs stay selectable so typing and pasting work. */
+      body {
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      input, textarea, [contenteditable="true"] {
+        -webkit-user-select: text;
+        user-select: text;
+        -webkit-touch-callout: default;
+      }
     </style>
     <!-- END castleague web shell -->
   </head>
@@ -52,6 +67,6 @@
     </noscript>
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
-  <script src="/_expo/static/js/web/index-d438ef600787aa795646cac91cfc7989.js" defer></script>
+  <script src="/_expo/static/js/web/index-87b8f6803db3d8b686ba4a4863164eb4.js" defer></script>
 </body>
 </html>
