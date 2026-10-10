@@ -57,6 +57,14 @@
         -webkit-touch-callout: default;
       }
     </style>
+    <script>
+      /* Stores the app on the phone so it opens with no signal. See public/sw.js. */
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
+        });
+      }
+    </script>
     <!-- END castleague web shell -->
   </head>
 
@@ -67,6 +75,6 @@
     </noscript>
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
-  <script src="/_expo/static/js/web/index-5d1a0631f435bba5df59f13d9b31165d.js" defer></script>
+  <script src="/_expo/static/js/web/index-5ea7b9598c4c6844452a80bf4681bb29.js" defer></script>
 </body>
 </html>
