@@ -151,3 +151,43 @@ self.addEventListener('fetch', (event) => {
   }
   // Everything else (Supabase, analytics) goes straight to the network.
 });
+
+/*
+ * Phone alerts (Web Push, migration 0062): "It looks good at your dam" and the
+ * like, shown on the lock screen. Tapping one opens the app at that page.
+ */
+self.addEventListener('push', (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = { title: 'CastLeague', body: event.data ? event.data.text() : '' };
+  }
+  const title = data.title || 'CastLeague';
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: data.body || '',
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
+      data: { url: data.url || '/notifications' },
+    }),
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || '/';
+  event.waitUntil(
+    (async () => {
+      const all = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      for (const client of all) {
+        if ('focus' in client) {
+          await client.focus();
+          if ('navigate' in client) await client.navigate(url).catch(() => undefined);
+          return;
+        }
+      }
+      await self.clients.openWindow(url);
+    })(),
+  );
+});
